@@ -8,7 +8,10 @@ const createProducts = async (name, quantity) => {
   return products;
 };
 
+const productsExists = async (name) => Products.productsExists(name);
+
 module.exports = {
   getAll,
   createProducts,
+  productsExists,
 };
