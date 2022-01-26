@@ -10,6 +10,9 @@ const productMessages = {
   alreadyExists: {
     message: 'Product already exists',
   },
+  notExists: {
+    message: 'Product not found',
+  },
   quantityIsRequired: {
     message: '"quantity" is required',
   },
@@ -40,7 +43,7 @@ const validateQuantity = (req, res, next) => {
   next();
 };
 
-const checkExists = async (req, res, next) => {
+const checkAlreadyExists = async (req, res, next) => {
   const { name, quantity } = req.body;
   const products = await productsExists(name, quantity);
   if (products.length > 0) {
@@ -50,8 +53,20 @@ const checkExists = async (req, res, next) => {
   next();
 };
 
+const checkNotExists = async (req, res, next) => {
+  const { id } = req.params;
+  const products = await productsExists(id);
+  console.log(products, 'check');
+  if (products.length === 0) {
+    return res.status(404).send(productMessages.notExists);
+  }
+
+  next();
+};
+
 module.exports = {
   validateName,
   validateQuantity,
-  checkExists,
+  checkAlreadyExists,
+  checkNotExists,
 };

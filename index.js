@@ -4,7 +4,8 @@ require('dotenv').config();
 const {
   validateName,
   validateQuantity,
-  checkExists,
+  checkAlreadyExists,
+  checkNotExists,
 } = require('./middlewares/ProductsMiddleware');
 const Products = require('./controllers/ProductsController');
 
@@ -19,8 +20,11 @@ app.get('/', (_request, response) => {
 
 app.get('/products/:id', Products.getById);
 app.get('/products', Products.getAll);
+app.put('/products/:id', [validateName,
+  validateQuantity, checkNotExists, Products.editProducts]);
 app.post('/products', [validateName,
-  validateQuantity, checkExists, Products.createProducts]);
+  validateQuantity, checkAlreadyExists, Products.createProducts]);
+app.delete('/products/:id', [checkNotExists, Products.deleteProducts]);
 
 app.listen(process.env.PORT, () => {
   console.log(`Escutando na porta ${process.env.PORT}`);
