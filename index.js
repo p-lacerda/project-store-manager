@@ -17,6 +17,7 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
+app.get('/products/:id', Products.getById);
 app.get('/products', Products.getAll);
 app.post('/products', [validateName,
   validateQuantity, checkExists, Products.createProducts]);

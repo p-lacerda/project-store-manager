@@ -15,6 +15,16 @@ const getAll = async () => {
   return products;
 };
 
+const getById = async (id) => {
+  const query = 'SELECT * '
+  + 'FROM StoreManager.products '
+  + 'WHERE id = ?';
+  const params = [id];
+  const [productById] = await connection.execute(query, params);
+  if (productById.length === 0) return null;
+  return productById[0];
+};
+
 const productsExists = async (name) => {
   const query = 'SELECT * '
   + 'FROM StoreManager.products '
@@ -34,6 +44,7 @@ const createProducts = async (name, quantity) => {
 
 module.exports = {
   getAll,
+  getById,
   createProducts,
   productsExists,
 };
