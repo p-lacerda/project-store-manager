@@ -6,13 +6,13 @@ const getAll = async (_req, res) => {
   res.status(200).json(products);
 };
 
-async function createProducts(req, res) {
+const createProducts = async (req, res) => {
   const { name, quantity } = req.body;
 
   const products = await Products.createProducts(name, quantity);
 
   res.status(201).json(products);
-}
+};
 
 const getById = async (req, res) => {
   const { id } = req.params;
