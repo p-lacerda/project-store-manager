@@ -1,4 +1,4 @@
-const { productsExists } = require('../services/ProductsServices');
+const Products = require('../services/ProductsServices');
 
 const productMessages = {
   nameIsRequired: {
@@ -44,10 +44,10 @@ const validateQuantity = (req, res, next) => {
 };
 
 const checkAlreadyExists = async (req, res, next) => {
-  const { name, quantity } = req.body;
-  const products = await productsExists(name, quantity);
+  const { name } = req.body;
+  const products = await Products.productsExists(name);
   if (products.length > 0) {
-    return res.status(409).send(productMessages.alreadyExists);
+    return res.status(409).json(productMessages.alreadyExists);
   }
 
   next();
@@ -55,10 +55,10 @@ const checkAlreadyExists = async (req, res, next) => {
 
 const checkNotExists = async (req, res, next) => {
   const { id } = req.params;
-  const products = await productsExists(id);
-  console.log(products, 'check');
-  if (products.length === 0) {
-    return res.status(404).send(productMessages.notExists);
+  const products = await Products.getById(id);
+  console.log(products);
+  if (products === [] || products === null) {
+    return res.status(404).json(productMessages.notExists);
   }
 
   next();

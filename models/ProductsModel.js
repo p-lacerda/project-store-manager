@@ -21,15 +21,16 @@ const getById = async (id) => {
   + 'WHERE id = ?';
   const params = [id];
   const [productById] = await connection.execute(query, params);
+  console.log(productById);
   if (productById.length === 0) return null;
   return productById[0];
 };
 
-const productsExists = async (id) => {
+const productsExists = async (name) => {
   const query = 'SELECT * '
   + 'FROM StoreManager.products '
-  + 'WHERE id = ?';
-  const params = [id];
+  + 'WHERE name = ?';
+  const params = [name];
   const [products] = await connection.execute(query, params);
   return products;
 };

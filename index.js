@@ -19,11 +19,15 @@ app.get('/', (_request, response) => {
 });
 
 app.get('/products/:id', Products.getById);
+
 app.get('/products', Products.getAll);
+
 app.put('/products/:id', [validateName,
   validateQuantity, checkNotExists, Products.editProducts]);
+  
 app.post('/products', [validateName,
   validateQuantity, checkAlreadyExists, Products.createProducts]);
+  
 app.delete('/products/:id', [checkNotExists, Products.deleteProducts]);
 
 app.listen(process.env.PORT, () => {
