@@ -136,3 +136,88 @@ describe("consulta de produtos do DB por id", () => {
 
   });
 });
+
+describe("cria algum produto no DB", () => {
+  describe("quando é inserido com sucesso", () => {
+    const payloadProducts = {
+      name: 'produto',
+      quantity: 38,
+    };
+
+    before(() => {
+      const execute = [{ insertId: 1 }];
+      
+      sinon.stub(connection, "execute").resolves(execute);
+    });
+
+    after(() => {
+      connection.execute.restore();
+    });
+
+    it("retorna um objeto", async () => {
+      const response = await ProductsModel.createProducts(payloadProducts);
+
+      expect(response).to.be.an('object')
+    });
+
+    it("possui o id, name e quantity do produto inserido", async () => {
+      const response = await ProductsModel.createProducts(payloadProducts);
+
+      expect(response).to.have.all.keys("id", "name", "quantity")
+    });
+  });
+})
+
+describe("edita algum produto no DB", () => {
+  describe("quando existe algum produto no DB", () => {
+    const payloadProducts = {
+      name: 'produto',
+      quantity: 30
+    }
+
+    const execute = {
+      id: 1,
+      name: 'produto_changed',
+      quantity: 50
+    };
+
+    before(async () => {
+      sinon.stub(ProductsModel, "createProducts").resolves(payloadProducts);
+      await ProductsModel.createProducts();
+      sinon.stub(connection, "execute").resolves(execute);
+    });
+
+    after(() => {
+      ProductsModel.createProducts.restore();
+      connection.execute.restore();
+    });
+
+    it("retorna um objeto", async () => {
+      const { name, quantity, id } = execute;
+      const response = await ProductsModel.editProducts(name, quantity, id);
+
+      expect(response).to.be.an('object')
+    });
+
+    it("possui o id, name e quantity do produto inserido", async () => {
+      const { name, quantity, id } = execute;
+      const response = await ProductsModel.editProducts(name, quantity, id);
+
+      expect(response).to.have.all.keys("id", "name", "quantity")
+    });
+
+    it("name ou quantity são alterados após adicionar um dado novo", async () => {
+      const { name, quantity, id } = execute;
+      const response = await ProductsModel.editProducts(name, quantity, id);
+
+      expect(response.name).to.be.equal('produto_changed');
+      expect(response.quantity).to.be.equal(50);
+    });
+  });
+});
+
+describe("deleta algum produto no DB", () => {
+  describe("quando existe algum produto no DB", () => {
+
+  });
+});

@@ -36,10 +36,12 @@ const productsExists = async (name) => {
 };
 
 const createProducts = async (name, quantity) => {
-  const [products] = await connection.execute(
+  console.log(name, quantity, 'esse é aqui model');
+  const products = await connection.execute(
     'INSERT INTO StoreManager.products (name, quantity) VALUES (?, ?)',
     [name, quantity],
   );
+  console.log(products, 'create');
   return getNewProducts({ id: products.insertId, name, quantity });
 };
 
@@ -47,9 +49,10 @@ const editProducts = async (name, quantity, id) => {
   const query = 'UPDATE StoreManager.products '
   + 'SET name = ?, quantity = ? WHERE id = ?';
   const params = [name, quantity, id];
-  await connection.execute(query, params);
-  const searchProduct = await getById(id);
-  return searchProduct;
+  console.log(name, quantity, id, 'edit');
+  const product = await connection.execute(query, params);
+  console.log(product);
+  return product;
 };
 
 const deleteProducts = async (id) => {
