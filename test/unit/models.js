@@ -102,7 +102,7 @@ describe("consulta de produtos do DB por id", () => {
   describe("quando não existe produto criado em products/:id", () => {
     before(() => {
 
-      sinon.stub(connection, "execute").returns([[]]);
+      sinon.stub(connection, "execute").returns([{}]);
     });
 
     after(() => {
@@ -111,11 +111,28 @@ describe("consulta de produtos do DB por id", () => {
 
     it("retorna array", async () => {
       const response = await ProductsModel.getAll();
-      expect(response).to.be.an('array');
+      expect(response).to.be.an('object');
     });
     it("retorna array vazio", async () => {
       const response = await ProductsModel.getAll();
       expect(response).to.be.empty;
     });
+  });
+
+  describe("quando é passado um id que não existe em products/:id", () => {
+    before(() => {
+
+      sinon.stub(connection, "execute").returns([[null]]);
+    });
+
+    after(() => {
+      connection.execute.restore();
+    });
+
+    it('retorna null', async () => {
+      const response = await ProductsModel.getById();
+      expect(response).to.be.null;
+    });
+
   });
 });

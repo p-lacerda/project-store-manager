@@ -1,5 +1,131 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 
-const Products = require('../../services/ProductsServices');
+const ProductsServices = require('../../services/ProductsServices');
 const ProductsModel = require('../../models/ProductsModel');
+
+describe("consulta de todos os produtos do DB no services", () => {
+  describe("quando não existe produto criado em products/", () => {
+    before(() => {
+      sinon.stub(ProductsModel, 'getAll')
+        .resolves([]);
+    });
+
+    // Restauraremos a função `create` original após os testes.
+    after(() => {
+      ProductsModel.getAll.restore();
+    });
+
+    it("retorna array", async () => {
+      const response = await ProductsServices.getAll();
+      expect(response).to.be.an('array');
+    });
+    it("retorna array vazio", async () => {
+      const response = await ProductsServices.getAll();
+      expect(response).to.be.empty;
+    });
+  });
+
+  describe("quando existe produto criado em products/", () => {
+    before(() => {
+      sinon.stub(ProductsModel, 'getAll')
+        .resolves([{
+          id: 1,
+          name: 'product',
+          quantity: 10,
+        }]);
+    });
+
+    // Restauraremos a função `create` original após os testes.
+    after(() => {
+      ProductsModel.getAll.restore();
+    });
+
+    it("retorna array", async () => {
+      const response = await ProductsServices.getAll();
+      expect(response).to.be.an('array');
+    });
+  
+    it("o array não está vazio", async () => {
+      const response = await ProductsServices.getAll();
+      expect(response).to.be.not.empty;
+    });
+
+    it("o array tem as chaves id, name e quantity", async () => {
+      const [products] = await ProductsServices.getAll();
+      expect(products).to.include.all.keys("id","name", "quantity");
+    });
+  });
+});
+
+describe("consulta de produtos do DB por id em services", () => {
+  describe("quando existe produto criado em products/:id", () => {
+    before(() => {
+      sinon.stub(ProductsModel, 'getById')
+        .resolves({
+          id: 1,
+          name: 'produto',
+          quantity: 15
+        });
+    });
+
+    // Restauraremos a função `create` original após os testes.
+    after(() => {
+      ProductsModel.getById.restore();
+    });
+
+    it("retorna objeto", async () => {
+      const response = await ProductsServices.getById();
+      expect(response).to.be.an('object');
+    });
+  
+    it("o objeto não está vazio", async () => {
+      const response = await ProductsServices.getById();
+      expect(response).to.be.not.empty;
+    });
+
+    it("contem as chaves id, name e quantity", async () => {
+      const response = await ProductsServices.getById();
+      expect(response).to.contain.keys('id', 'name', 'quantity');
+    });
+  });
+
+  describe("quando não existe produto criado em products/:id", () => {
+    before(() => {
+      sinon.stub(ProductsModel, 'getById')
+        .resolves({});
+    });
+
+    // Restauraremos a função `create` original após os testes.
+    after(() => {
+      ProductsModel.getById.restore();
+    });
+    it("retorna array", async () => {
+      const response = await ProductsServices.getById();
+      expect(response).to.be.an('object');
+    });
+
+    it("retorna array vazio", async () => {
+      const response = await ProductsServices.getById();
+      expect(response).to.be.empty;
+    });
+  });
+
+  describe("quando é passado um id que não existe em products/:id", () => {
+    before(() => {
+      sinon.stub(ProductsModel, 'getById')
+        .resolves(null);
+    });
+
+    // Restauraremos a função `create` original após os testes.
+    after(() => {
+      ProductsModel.getById.restore();
+    });
+
+    it('retorna null', async () => {
+      const response = await ProductsServices.getById();
+      expect(response).to.be.null;
+    });
+
+  });
+});

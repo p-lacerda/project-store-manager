@@ -19,7 +19,7 @@ const getById = async (req, res) => {
 
   const product = await Products.getById(id);
 
-  if (product === null) return res.status(404).send({ message: 'Product not found' });
+  if (product === null) return res.status(404).json({ message: 'Product not found' });
 
   res.status(200).json(product);
 };
