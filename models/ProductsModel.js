@@ -1,15 +1,5 @@
 const connection = require('./connection');
 
-const getNewProducts = (products) => {
-  const { id, name, quantity } = products;
-
-  return {
-    id,
-    name,
-    quantity,
-  };
-};
-
 const getAll = async () => {
   const [products] = await connection.execute('SELECT * FROM StoreManager.products');
   return products;
@@ -36,13 +26,11 @@ const productsExists = async (name) => {
 };
 
 const createProducts = async (name, quantity) => {
-  console.log(name, quantity, 'esse é aqui model');
-  const products = await connection.execute(
+  const [products] = await connection.execute(
     'INSERT INTO StoreManager.products (name, quantity) VALUES (?, ?)',
     [name, quantity],
   );
-  console.log(products, 'create');
-  return getNewProducts({ id: products.insertId, name, quantity });
+  return { id: products.insertId, name, quantity };
 };
 
 const editProducts = async (name, quantity, id) => {
@@ -50,9 +38,9 @@ const editProducts = async (name, quantity, id) => {
   + 'SET name = ?, quantity = ? WHERE id = ?';
   const params = [name, quantity, id];
   console.log(name, quantity, id, 'edit');
-  const product = await connection.execute(query, params);
-  console.log(product);
-  return product;
+  await connection.execute(query, params);
+  const getProduct = await getById(id);
+  return { id: getProduct.id, name: getProduct.name, quantity: getProduct.quantity };
 };
 
 const deleteProducts = async (id) => {

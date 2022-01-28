@@ -184,12 +184,12 @@ describe("edita algum produto no DB", () => {
     before(async () => {
       sinon.stub(ProductsModel, "createProducts").resolves(payloadProducts);
       await ProductsModel.createProducts();
-      sinon.stub(connection, "execute").resolves(execute);
+      sinon.stub(ProductsModel, "editProducts").resolves(execute);
     });
 
     after(() => {
       ProductsModel.createProducts.restore();
-      connection.execute.restore();
+      ProductsModel.editProducts.restore();
     });
 
     it("retorna um objeto", async () => {
