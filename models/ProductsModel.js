@@ -34,22 +34,18 @@ const createProducts = async (name, quantity) => {
 };
 
 const editProducts = async (name, quantity, id) => {
-  const query = 'UPDATE StoreManager.products '
-  + 'SET name = ?, quantity = ? WHERE id = ?';
-  const params = [name, quantity, id];
-  console.log(name, quantity, id, 'edit');
-  await connection.execute(query, params);
-  const getProduct = await getById(id);
-  return { id: getProduct.id, name: getProduct.name, quantity: getProduct.quantity };
+  await connection.execute('UPDATE StoreManager.products '
+  + 'SET name = ?, quantity = ? WHERE id = ?', [name, quantity, id]);
+  const product = await getById(id);
+  return { id: product.id, name: product.name, quantity: product.quantity };
 };
 
 const deleteProducts = async (id) => {
-  const product = await getById(id);
-  const query = 'DELETE FROM StoreManager.products '
-  + 'WHERE id = ?';
-  const params = [id];
-  await connection.execute(query, params);
-
+  const product = getById(id);
+  await connection.execute(
+    'DELETE FROM StoreManager.products WHERE id = ?',
+    [id],
+  );
   return product;
 };
 

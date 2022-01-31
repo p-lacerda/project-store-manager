@@ -56,7 +56,6 @@ const checkAlreadyExists = async (req, res, next) => {
 const checkNotExists = async (req, res, next) => {
   const { id } = req.params;
   const products = await Products.getById(id);
-  console.log(products);
   if (products === [] || products === null) {
     return res.status(404).json(productMessages.notExists);
   }

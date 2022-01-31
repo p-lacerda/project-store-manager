@@ -129,3 +129,35 @@ describe("consulta de produtos do DB por id em services", () => {
 
   });
 });
+
+describe("cria algum produto", () => {
+  const payload = {
+    id: 1,
+    name: 'produto',
+    quantity: 38,
+  };
+
+  before(() => {
+    sinon.stub(ProductsServices, "createProducts").resolves(payload);
+  });
+
+  after(() => {
+    ProductsServices.createProducts.restore();
+  });
+
+  const { name, quantity } = payload;
+
+  describe("quando é inserido com sucesso", () => {
+    it("retorna um objeto", async () => {
+      const response = await ProductsServices.createProducts(name, quantity);
+
+      expect(response).to.be.an('object')
+    });
+
+    it("possui o id, name e quantity do produto inserido", async () => {
+      const response = await ProductsServices.createProducts(name, quantity);
+
+      expect(response).to.have.all.keys("id", "name", "quantity")
+    });
+  });
+});
