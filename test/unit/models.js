@@ -102,7 +102,7 @@ describe("testa o model de products", () => {
     describe("quando não existe produto criado em products/:id", () => {
       before(() => {
   
-        sinon.stub(connection, "execute").resolves([null]);
+        sinon.stub(connection, "execute").resolves([{}]);
       });
   
       after(() => {
@@ -111,7 +111,7 @@ describe("testa o model de products", () => {
   
       it("retorna array", async () => {
         const response = await ProductsModel.getAll();
-        expect(response).to.be.null;
+        expect(response).to.be.empty;
       });
     });
   

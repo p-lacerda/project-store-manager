@@ -11,7 +11,6 @@ const getById = async (id) => {
   + 'WHERE id = ?';
   const params = [id];
   const [productById] = await connection.execute(query, params);
-  console.log(productById);
   if (productById.length === 0) return null;
   return productById[0];
 };
