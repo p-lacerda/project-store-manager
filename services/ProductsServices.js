@@ -8,7 +8,6 @@ const deleteProducts = async (id) => Products.deleteProducts(id);
 
 const editProducts = async (name, quantity, id) => {
   const product = await Products.editProducts(name, quantity, id);
-
   return product;
 };
 

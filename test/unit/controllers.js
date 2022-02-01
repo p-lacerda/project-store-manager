@@ -146,11 +146,79 @@ describe("testa os controllers de products", () => {
   });
 
   describe("Ao chamar o controller de editProducts", () => {
+    describe("quando existe um produto no DB", () => {
+      const payload = {
+        id: 1,
+        name: 'produto',
+        quantity: 10
+      };
 
+      const { id, name, quantity } = payload;
+
+      const response = {};
+      const request = { params: { id } };
+  
+      before(() => {
+        request.body = { name, quantity };
+
+        response.status = sinon.stub().returns(response);
+        response.json = sinon.stub().resolves();
+  
+        sinon.stub(ProductsService, "editProducts").resolves(payload);
+      });
+  
+      after(() => {
+        ProductsService.editProducts.restore();
+      });
+
+      it('é chamado o método "status" passando o código 201', async () => {
+        await ProductsController.editProducts(request, response);
+        expect(response.status.calledWith(200)).to.be.equals(true);
+      });
+  
+      it('é chamado o método "json" passando um objeto', async () => {
+        await ProductsController.editProducts(request, response);
+        expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
+      });
+    });
   });
 
   describe("Ao chamar o controller de deleteProducts", () => {
+    describe("quando existe um produto no DB", () => {
+      const payload = {
+        id: 1,
+        name: 'produto',
+        quantity: 10
+      };
 
+      const { id, name, quantity } = payload;
+
+      const response = {};
+      const request = { params: { id } };
+  
+      before(() => {
+        request.body = { name, quantity };
+
+        response.status = sinon.stub().returns(response);
+        response.json = sinon.stub().resolves();
+  
+        sinon.stub(ProductsService, "deleteProducts").resolves(payload);
+      });
+  
+      after(() => {
+        ProductsService.deleteProducts.restore();
+      });
+
+      it('é chamado o método "status" passando o código 201', async () => {
+        await ProductsController.deleteProducts(request, response);
+        expect(response.status.calledWith(200)).to.be.equals(true);
+      });
+  
+      it('é chamado o método "json" passando um objeto', async () => {
+        await ProductsController.deleteProducts(request, response);
+        expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
+      });
+    });
   });
 });
 

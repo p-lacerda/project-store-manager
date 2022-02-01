@@ -138,11 +138,11 @@ describe("cria algum produto", () => {
   };
 
   before(() => {
-    sinon.stub(ProductsServices, "createProducts").resolves(payload);
+    sinon.stub(ProductsModel, "createProducts").resolves(payload);
   });
 
   after(() => {
-    ProductsServices.createProducts.restore();
+    ProductsModel.createProducts.restore();
   });
 
   const { name, quantity } = payload;
@@ -156,6 +156,37 @@ describe("cria algum produto", () => {
 
     it("possui o id, name e quantity do produto inserido", async () => {
       const response = await ProductsServices.createProducts(name, quantity);
+
+      expect(response).to.have.all.keys("id", "name", "quantity")
+    });
+  });
+});
+
+describe("edita algum produto", () => {
+  const payload = {
+    id: 3,
+    name: 'produto',
+    quantity: 210,
+  };
+
+  before(() => {
+    sinon.stub(ProductsModel, "editProducts").resolves(payload);
+  });
+
+  after(() => {
+    ProductsModel.editProducts.restore();
+  });
+
+  const { name, quantity, id } = payload;
+
+  describe("quando é editado com sucesso", () => {
+    it("retorna um objeto", async () => {
+      const response = await ProductsServices.editProducts(name, quantity, id);
+      expect(response).to.be.an('object')
+    });
+
+    it("possui o id, name e quantity do produto inserido", async () => {
+      const response = await ProductsServices.editProducts(name, quantity, id);
 
       expect(response).to.have.all.keys("id", "name", "quantity")
     });
