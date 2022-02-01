@@ -102,7 +102,7 @@ describe("testa o model de products", () => {
     describe("quando não existe produto criado em products/:id", () => {
       before(() => {
   
-        sinon.stub(connection, "execute").returns([{}]);
+        sinon.stub(connection, "execute").resolves([null]);
       });
   
       after(() => {
@@ -111,15 +111,12 @@ describe("testa o model de products", () => {
   
       it("retorna array", async () => {
         const response = await ProductsModel.getAll();
-        expect(response).to.be.an('object');
-      });
-      it("retorna array vazio", async () => {
-        const response = await ProductsModel.getAll();
-        expect(response).to.be.empty;
+        expect(response).to.be.null;
       });
     });
   
     describe("quando é passado um id que não existe em products/:id", () => {
+      const id = 5;
       before(() => {
   
         sinon.stub(connection, "execute").returns([[null]]);
@@ -130,7 +127,7 @@ describe("testa o model de products", () => {
       });
   
       it('retorna null', async () => {
-        const response = await ProductsModel.getById();
+        const response = await ProductsModel.getById(id);
         expect(response).to.be.null;
       });
   
@@ -241,6 +238,67 @@ describe("testa o model de products", () => {
         const response = await ProductsModel.deleteProducts(1);
   
         expect(response).to.deep.equal(payload)
+      });
+    });
+  });
+
+  describe('verifica se o produto existe', () => {
+    describe('quando não existe o produto', () => {
+      const payload = {
+        name: "",
+      };
+
+      const { name } = payload;
+
+      before(() => {
+        sinon.stub(connection, "execute").resolves([{}]);
+      });
+  
+      after(() => {
+        connection.execute.restore();
+      });
+  
+      it("retorna null", async () => {
+        const response = await ProductsModel.productsExists(name);
+        console.log(response);
+        expect(response).to.be.empty;
+      });
+    });
+  
+    describe('quando existe o produto', () => {
+      const payload = {
+        id: 1,
+        name: "farofa",
+        quantity: 10
+      };
+
+      const { name } = payload;
+
+      before(async () => {
+  
+        sinon.stub(connection, "execute").resolves([payload])
+      });
+
+      after(async () => {
+        connection.execute.restore();
+      });
+  
+      it('retorna um array', async () => {
+        const response = await ProductsModel.productsExists(name);
+  
+        expect(response).to.be.an('object');
+      });
+  
+      it('o array não está vazio', async () => {
+        const response = await ProductsModel.productsExists(name);
+  
+        expect(response).to.be.not.empty;
+      });
+  
+      it('o array tem as chaves id, name e quantity', async() => {
+        const response = await ProductsModel.productsExists(name);
+  
+        expect(response).to.include.all.keys('id','name', 'quantity');
       });
     });
   });
