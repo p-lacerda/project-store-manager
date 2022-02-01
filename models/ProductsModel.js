@@ -40,7 +40,7 @@ const editProducts = async (name, quantity, id) => {
 };
 
 const deleteProducts = async (id) => {
-  const product = getById(id);
+  const product = await getById(id);
   await connection.execute(
     'DELETE FROM StoreManager.products WHERE id = ?',
     [id],
