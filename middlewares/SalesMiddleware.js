@@ -1,18 +1,22 @@
+const ProductServices = require('../services/ProductsServices');
+
 const authProductSale = async (req, res, next) => {
-    const { body } = req;
-    const thisBu = [];
-    body.forEach(async (p) => {
-      // const productIdEx = await storeServices.getProductId(p.product_id);
-      // console.log(await productIdEx);
-      if (p.product_id === undefined) {
-        thisBu.push(false);
-      }
-    });
-    if (thisBu.includes(false)) {
-      return res.status(400).json({ message: '"product_id" is required' });
+  const { body } = req;
+  const productBool = [];
+  const products = await ProductServices.getAll();
+  body.forEach((p) => {
+    const findProduct = products.find((product) => product.id === p.product_id);
+
+    if (!p || p.product_id === undefined || !findProduct) {
+      productBool.push(false);
     }
-    next();
-  };
+  });
+  if (productBool.includes(false)) {
+    return res.status(400).json({ message: '"product_id" is required' });
+  }
+  next();
+};
+
   
   const authSaleQuantity = async (req, res, next) => {
     const { body } = req;
@@ -45,7 +49,8 @@ const authProductSale = async (req, res, next) => {
     }
     next();
   };
-
+  
+  
   module.exports = {
     authProductSale,
     authSaleQuantity,

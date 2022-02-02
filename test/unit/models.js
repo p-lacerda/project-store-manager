@@ -2,6 +2,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const connection = require('../../models/connection');
 const ProductsModel = require('../../models/ProductsModel');
+const SalesModel = require("../../models/SalesModel");
 
 describe("testa o model de products", () => {
   describe("consulta de todos os produtos do DB", () => {
@@ -304,3 +305,51 @@ describe("testa o model de products", () => {
   });
 });
 
+describe('testa o model de sales', () => {
+  describe('quando cria uma nova sales no BD', () => {
+    before(async () => {
+      const execute = [{ insertId: 1}];
+
+      sinon.stub(connection, 'execute').returns(execute);
+    });
+
+    after(async () => {
+      connection.execute.restore();
+    });
+
+    describe('quando é inserido com sucesso', () => {
+
+      it('retorna um objeto', async () => {
+        const response = await SalesModel.createSale();
+        console.log(response)
+
+        expect(response).to.be.a('object');
+      });
+    });
+  });
+
+  describe('Cadastra uma nova sales_product no banco de dados', () => {
+    const payload = {
+      productId: 2,
+      quantity: 3,
+      id: 3
+    }
+
+    before(async () => {
+      sinon.stub(connection, 'query').returns(payload);
+    });
+
+    after(async () => {
+      connection.query.restore();
+    });
+
+    describe('quando é inserido com sucesso', () => {
+
+      it('retorna um objeto', async () => {
+        const response = await SalesModel.createSalesProduct(payload);
+
+        expect(response).to.be.a('object');
+      });
+    });
+  });
+  });

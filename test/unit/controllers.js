@@ -4,6 +4,9 @@ const { expect } = require("chai");
 const ProductsService = require("../../services/ProductsServices");
 const ProductsController = require("../../controllers/ProductsController");
 
+const SalesController = require("../../controllers/SalesController");
+const SalesServices = require("../../services/SalesService");
+
 
 describe("testa os controllers de products", () => {
   describe("Ao chamar o controller de getAll", () => {
@@ -222,3 +225,43 @@ describe("testa os controllers de products", () => {
   });
 });
 
+describe('testa os controllers de sales', () => {
+
+  describe("Ao chamar o controller de createProductsSale", () => {
+    describe("quando existe um produto no BD", () => {
+      const payload = {
+        id: 1,
+        name: 'product',
+        quantity: 15
+      };
+
+      const response = {};
+      const request = { body: {} };
+
+      before(() => {
+        request.body = { product_id: 1, quantity: 15 };
+
+        response.status = sinon.stub().returns(response);
+        response.json = sinon.stub().resolves();
+
+        sinon.stub(SalesServices, "createSalesProduct").resolves(1);
+      });
+
+      after(() => {
+        SalesServices.createSalesProduct.restore();
+      });
+
+      it('é chamado o status com o código 201', async () => {
+        await SalesController.createSalesProduct(request, response);
+
+        expect(response.status.calledWith(201)).to.be.equals(true);
+      });
+
+      it('é chamado o json com um objeto', async () => {
+        await SalesController.createSalesProduct(request, response);
+
+        expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
+      });
+    });
+  });
+});

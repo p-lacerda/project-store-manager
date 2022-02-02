@@ -4,6 +4,9 @@ const sinon = require('sinon');
 const ProductsServices = require('../../services/ProductsServices');
 const ProductsModel = require('../../models/ProductsModel');
 
+const SalesModel = require("../../models/SalesModel");
+const SalesServices = require("../../services/SalesService");
+
 describe("consulta de todos os produtos do DB no services", () => {
   describe("quando não existe produto criado em products/", () => {
     before(() => {
@@ -192,3 +195,34 @@ describe("edita algum produto", () => {
     });
   });
 });
+
+describe('testa o services de sales', () => {
+  describe('quando insere uma nova sale no BD', () => {
+
+    describe('quando é inserido com sucesso', () => {
+      const payload = {
+        productId: 2,
+        quantity: 3,
+      };
+
+      before(() => {
+        sinon.stub(SalesModel, 'createSalesProduct')
+          .returns([{}]);
+          sinon.stub(SalesModel, 'createSale')
+          .returns({id: 2})
+      });
+
+      after(() => {
+        SalesModel.createSalesProduct.restore();
+        SalesModel.createSale.restore();
+      });
+
+      it('retorna um objeto', async () => {
+        const response = await SalesServices.createSalesProduct([payload]);
+
+        expect(response).to.be.a('number');
+      });
+
+    });
+  })
+})

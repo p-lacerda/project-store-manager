@@ -3,15 +3,15 @@ const connection = require('./connection');
 const createSale = async () => {
   const [result] = await connection.execute(
     'INSERT INTO StoreManager.sales (id) VALUES (DEFAULT)',
-);
-    return result.insertId;
+); 
+    return { id: result.insertId };
 };
 
 const createSalesProduct = async ({ productId, quantity, id }) => {
-  const [sale] = await connection
+  await connection
     .query('INSERT INTO StoreManager.sales_products (sale_id, product_id, quantity) VALUES (?,?,?)',
       [id, productId, quantity]);
-  return sale;
+  return { id, productId, quantity };
 };
 
 module.exports = {
