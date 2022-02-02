@@ -34,7 +34,8 @@ app.post('/products', [validateName,
   validateQuantity, checkAlreadyExists, Products.createProducts]);
 app.delete('/products/:id', [checkNotExists, Products.deleteProducts]);
 
-app.get('/sales/:id?', [Sales.getById, Sales.getAll]);
+app.get('/sales/:id', Sales.getById);
+app.get('/sales', Sales.getAll);
 
 app.post('/sales', [authProductSale, 
   authSaleQuantity, authRightQuantity, Sales.createSalesProduct]);

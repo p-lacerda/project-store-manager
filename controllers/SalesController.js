@@ -10,16 +10,24 @@ const createSalesProduct = async (req, res) => {
    });
 };
 
-const getAll = async (req, res) => {
+const getAll = async (_req, res) => {
+  const sales = await salesServices.getAll();
+
+  res.status(200).json(sales);
 };
 
 const getById = async (req, res) => {
   const { id } = req.params;
-  if (id) return res.send('')
+
+  const sales = await salesServices.getById(id);
+
+  if (sales === null) return res.status(404).json({ message: 'Sale not found' });
+
+  res.status(200).json(sales);
 };
 
 module.exports = {
   createSalesProduct,
   getAll,
-  getById
+  getById,
 };
