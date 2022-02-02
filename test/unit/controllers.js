@@ -225,16 +225,14 @@ describe("testa os controllers de products", () => {
   });
 });
 
-// PROVAVEL PROBLEMA
-describe('testa os controllers de sales', () => {
-
-  describe("Ao chamar o controller de createProductsSale", () => {
-    describe("quando existe um produto no BD", () => {
+describe('testa controllers de sales', () => {
+  describe("quando chama a função createProductsSale", () => {
+    describe("quando existe um produto no DB", () => {
       const response = {};
       const request = { body: {} };
 
-      before(async () => {
-        request.body = { product_id: 1, quantity: 15 };
+      before(() => {
+        request.body = { product_id: 1, quantity: 10 };
 
         response.status = sinon.stub().returns(response);
         response.json = sinon.stub().resolves();
@@ -242,7 +240,7 @@ describe('testa os controllers de sales', () => {
         sinon.stub(SalesServices, "createSalesProduct").resolves(1);
       });
 
-      after(async () => {
+      after(() => {
         SalesServices.createSalesProduct.restore();
       });
 
@@ -259,4 +257,4 @@ describe('testa os controllers de sales', () => {
       });
     });
   });
-});
+})

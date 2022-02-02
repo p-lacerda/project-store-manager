@@ -305,53 +305,55 @@ describe("testa o model de products", () => {
   });
 });
 
-// PROVAVEL PROBLEMA
-describe('testa o model de sales', () => {
+describe('Testa model de sales', () => {
 
-  describe('quando cria uma nova sales no BD', () => {
-    before(async () => {
-      const execute = [{ insertId: 1}];
-
-      sinon.stub(connection, 'execute').returns(execute);
-    });
-
-    after(async () => {
-      connection.execute.restore();
-    });
-
-    describe('quando é inserido com sucesso', () => {
-
-      it('retorna um objeto', async () => {
-        const response = await SalesModel.createSale();
-        console.log(response)
-
-        expect(response).to.be.a('object');
+    describe('Cadastra nova sales no banco de dados', () => {
+  
+      before(async () => {
+        const execute = [{ insertId: 1}];
+  
+        sinon.stub(connection, 'execute').returns(execute);
+      });
+  
+      after(async () => {
+        connection.execute.restore();
+      });
+  
+      describe('quando é inserido com sucesso', () => {
+  
+        it('retorna um objeto', async () => {
+          const response = await SalesModel.createSale();
+          console.log(response)
+  
+          expect(response).to.be.a('object');
+        });
       });
     });
-  });
-
-  describe('quando cria uma nova sales_product no BD', () => {
-    const payload = {
-      productId: 2,
-      quantity: 3,
-      id: 3
-    }
-
-    before(async () => {
-      sinon.stub(connection, 'query').returns(payload);
-    });
-
-    after(async () => {
-      connection.query.restore();
-    });
-
-    describe('quando é inserido com sucesso', () => {
-
-      it('retorna um objeto', async () => {
-        const response = await SalesModel.createSalesProduct(payload);
-
-        expect(response).to.be.a('object');
+  
+    describe('Cadastra uma nova sales_product no banco de dados', () => {
+      const payload = {
+        productId: 1,
+        quantity: 5,
+        id: 5
+      }
+  
+      before(async () => {
+        sinon.stub(connection, 'query').returns(payload);
+      });
+  
+      after(async () => {
+        connection.query.restore();
+      });
+  
+      describe('quando é inserido com sucesso', () => {
+  
+        it('retorna um objeto', async () => {
+          const response = await SalesModel.createSalesProduct(payload);
+  
+          expect(response).to.be.a('object');
+        });
+  
       });
     });
-  });
-  });
+  
+  })
