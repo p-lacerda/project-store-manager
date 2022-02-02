@@ -16,7 +16,6 @@ const authProductSale = async (req, res, next) => {
   }
   next();
 };
-
   
   const authSaleQuantity = async (req, res, next) => {
     const { body } = req;
@@ -49,7 +48,6 @@ const authProductSale = async (req, res, next) => {
     }
     next();
   };
-  
   
   module.exports = {
     authProductSale,
