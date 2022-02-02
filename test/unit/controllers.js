@@ -225,20 +225,15 @@ describe("testa os controllers de products", () => {
   });
 });
 
+// PROVAVEL PROBLEMA
 describe('testa os controllers de sales', () => {
 
   describe("Ao chamar o controller de createProductsSale", () => {
     describe("quando existe um produto no BD", () => {
-      const payload = {
-        id: 1,
-        name: 'product',
-        quantity: 15
-      };
-
       const response = {};
       const request = { body: {} };
 
-      before(() => {
+      before(async () => {
         request.body = { product_id: 1, quantity: 15 };
 
         response.status = sinon.stub().returns(response);
@@ -247,7 +242,7 @@ describe('testa os controllers de sales', () => {
         sinon.stub(SalesServices, "createSalesProduct").resolves(1);
       });
 
-      after(() => {
+      after(async () => {
         SalesServices.createSalesProduct.restore();
       });
 

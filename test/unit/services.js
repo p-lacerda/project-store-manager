@@ -196,6 +196,7 @@ describe("edita algum produto", () => {
   });
 });
 
+// PROVAVEL PROBLEMA
 describe('testa o services de sales', () => {
   describe('quando insere uma nova sale no BD', () => {
 
@@ -205,14 +206,14 @@ describe('testa o services de sales', () => {
         quantity: 3,
       };
 
-      before(() => {
+      before(async () => {
         sinon.stub(SalesModel, 'createSalesProduct')
           .returns([{}]);
           sinon.stub(SalesModel, 'createSale')
           .returns({id: 2})
       });
 
-      after(() => {
+      after(async () => {
         SalesModel.createSalesProduct.restore();
         SalesModel.createSale.restore();
       });

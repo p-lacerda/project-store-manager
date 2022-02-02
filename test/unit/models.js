@@ -305,7 +305,9 @@ describe("testa o model de products", () => {
   });
 });
 
+// PROVAVEL PROBLEMA
 describe('testa o model de sales', () => {
+
   describe('quando cria uma nova sales no BD', () => {
     before(async () => {
       const execute = [{ insertId: 1}];
@@ -328,7 +330,7 @@ describe('testa o model de sales', () => {
     });
   });
 
-  describe('Cadastra uma nova sales_product no banco de dados', () => {
+  describe('quando cria uma nova sales_product no BD', () => {
     const payload = {
       productId: 2,
       quantity: 3,
