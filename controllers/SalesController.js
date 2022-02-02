@@ -10,6 +10,16 @@ const createSalesProduct = async (req, res) => {
    });
 };
 
+const getAll = async (req, res) => {
+};
+
+const getById = async (req, res) => {
+  const { id } = req.params;
+  if (id) return res.send('')
+};
+
 module.exports = {
   createSalesProduct,
+  getAll,
+  getById
 };
