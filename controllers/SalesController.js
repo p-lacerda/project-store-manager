@@ -1,13 +1,15 @@
-const Sales = require('../services/SalesService');
+const salesServices = require('../services/SalesService');
 
-const createSale = async (req, res) => {
+const createSalesProduct = async (req, res) => {
   const { body } = req;
-  console.log(body, 'CONTROLLER');
-  const response = await Sales.createSale(body);
-
-  res.status(201).json(response);
+  const id = await salesServices.createSalesProduct(body);
+  
+  res.status(201).json({
+    id,
+    itemsSold: body,
+   });
 };
 
 module.exports = {
-  createSale,
+  createSalesProduct,
 };

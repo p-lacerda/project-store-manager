@@ -8,6 +8,11 @@ const {
   checkAlreadyExists,
   checkNotExists,
 } = require('./middlewares/ProductsMiddleware');
+const {
+  authProductSale,
+  authSaleQuantity,
+  authRightQuantity,
+} = require('./middlewares/SalesMiddleware');
 const Products = require('./controllers/ProductsController');
 const Sales = require('./controllers/SalesController');
 
@@ -29,8 +34,8 @@ app.post('/products', [validateName,
   validateQuantity, checkAlreadyExists, Products.createProducts]);
 app.delete('/products/:id', [checkNotExists, Products.deleteProducts]);
 
-// SALES
-app.post('/sales', Sales.createSale);
+app.post('/sales', [authProductSale, 
+  authSaleQuantity, authRightQuantity, Sales.createSalesProduct]);
 
 app.listen(process.env.PORT, () => {
   console.log(`Escutando na porta ${process.env.PORT}`);

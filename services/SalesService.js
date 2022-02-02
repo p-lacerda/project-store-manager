@@ -1,9 +1,15 @@
-const Sales = require('../models/SalesModel');
+const salesModel = require('../models/SalesModel');
 
-const createSale = async (body) => {
-  await Sales.createSale(body);
+const createSalesProduct = async (body) => {
+  const id = await salesModel.createSale();
+
+  body.map(async ({ product_id: productId, quantity }) => {
+   salesModel.createSalesProduct({ productId, quantity, id });
+  });
+
+  return id;
 };
 
 module.exports = {
-  createSale,
+  createSalesProduct,
 };
